@@ -4,11 +4,22 @@ import cors from "cors";
 import serverless from "serverless-http";
 import dotenv from "dotenv";
 
-dotenv.config();
+dotenv.config(); // Cargar las variables de entorno
 
 const app = express();
 
-app.use(cors());
+// Configuración de CORS
+app.use(
+  cors({
+    origin: [
+      "https://tudominio.netlify.app", // prox url del proyecto
+      "http://localhost:5173", // URL del frontend corriendo localmente
+    ],
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
 app.use(express.json());
 
 app.post("/api/tweets", async (req, res) => {
