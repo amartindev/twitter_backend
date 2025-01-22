@@ -4,18 +4,16 @@ import cors from "cors";
 import serverless from "serverless-http";
 import dotenv from "dotenv";
 
-dotenv.config(); // Cargar las variables de entorno
+dotenv.config();
 
 const app = express();
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Endpoint para obtener tweets
 app.post("/api/tweets", async (req, res) => {
   const { username } = req.body;
-  const accessToken = process.env.TWITTER_ACCESS_TOKEN; // Leer del archivo .env
+  const accessToken = process.env.TWITTER_ACCESS_TOKEN;
 
   if (!username) {
     return res.status(400).json({ error: "Username is required" });
@@ -36,5 +34,4 @@ app.post("/api/tweets", async (req, res) => {
   }
 });
 
-
-export default serverless(app);
+export default serverless(app); // Exportar como función serverless
