@@ -15,7 +15,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/api/tweets", async (req, res) => {
-  return res.json({ error: "lo lograste" });
+  return res.json({ message: "API is working" });
   })
 // Endpoint para obtener tweets
 app.post("/api/tweets", async (req, res) => {
