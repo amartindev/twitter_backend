@@ -12,8 +12,8 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "https://tudominio.netlify.app", // Cambia esta URL por la URL de tu frontend en Netlify
-      "http://localhost:5173", // URL del frontend corriendo localmente en el puerto 5173
+      "http://localhost:5173", // URL de desarrollo local
+      "https://tudominio.netlify.app", // URL del frontend en producción
     ],
     methods: ["GET", "POST", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -21,18 +21,21 @@ app.use(
   })
 );
 
-// Middleware para manejar solicitudes OPTIONS
+// Middleware para solicitudes preflight
 app.options("*", (req, res) => {
   res.set({
     "Access-Control-Allow-Origin": req.headers.origin || "*",
-    "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type,Authorization",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    "Access-Control-Allow-Credentials": "true",
   });
   res.status(204).end();
 });
 
+// Middleware para manejar JSON
 app.use(express.json());
 
+// Ruta para obtener tweets
 app.post("/api/tweets", async (req, res) => {
   const { username } = req.body;
   const accessToken = process.env.TWITTER_ACCESS_TOKEN;
@@ -51,9 +54,9 @@ app.post("/api/tweets", async (req, res) => {
     );
     res.json(response.data);
   } catch (error) {
-    console.error(error);
+    console.error(error.message);
     res.status(500).json({ error: error.message });
   }
 });
 
-export default serverless(app); // Exportar como función serverless
+export default serverless(app);
