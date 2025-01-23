@@ -11,20 +11,12 @@ const app = express();
 // Configuración de CORS
 app.use(cors());
 
-// Middleware para manejar solicitudes OPTIONS
-app.options("*", (req, res) => {
-    res.set({
-        "Access-Control-Allow-Origin": req.headers.origin || "*",
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-        "Access-Control-Allow-Credentials": "true",
-    });
-    res.status(200).end(); // IMPORTANTE: Asegúrate de devolver un estado 200
-});
-
 // Middleware para parsear JSON
 app.use(express.json());
 
+app.get("/api/tweets", async (req, res) => {
+  return res.json({ error: "lo lograste" });
+  })
 // Endpoint para obtener tweets
 app.post("/api/tweets", async (req, res) => {
     const { username } = req.body;
