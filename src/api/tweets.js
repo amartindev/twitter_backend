@@ -17,7 +17,7 @@ app.use(
       "https://tudominio.netlify.app", // Cambia esta URL por la URL de tu frontend en Netlify
       "http://localhost:5173", // URL del frontend corriendo localmente en el puerto 5173
     ],
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
