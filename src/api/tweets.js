@@ -9,11 +9,7 @@ dotenv.config();
 const app = express();
 
 // Configuración de CORS
-app.use(
-    cors({
-        origin: "*",
-    })
-);
+app.use(cors());
 
 // Middleware para manejar solicitudes OPTIONS
 app.options("*", (req, res) => {
