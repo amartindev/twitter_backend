@@ -9,8 +9,6 @@ dotenv.config(); // Cargar las variables de entorno
 const app = express();
 
 // Configuración de CORS
-
-// app.use(cors())
 app.use(
   cors({
     origin: [
@@ -22,7 +20,15 @@ app.use(
   })
 );
 
-
+// Middleware para manejar solicitudes OPTIONS
+app.options("*", (req, res) => {
+  res.set({
+    "Access-Control-Allow-Origin": req.headers.origin || "*",
+    "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type,Authorization",
+  });
+  res.status(204).end();
+});
 
 app.use(express.json());
 
