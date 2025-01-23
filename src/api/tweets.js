@@ -12,8 +12,8 @@ const app = express();
 app.use(
   cors({
     origin: [
-      // "http://localhost:5173",  URL local
-      "https://tudominio.netlify.app" // URL desplegada en Netlify
+      "http://localhost:5173",
+      "https://tudominio.netlify.app"
     ],
     methods: ["GET", "POST", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
