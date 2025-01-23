@@ -1,35 +1,39 @@
 import express from "express";
 import axios from "axios";
 import cors from "cors";
-import serverless from "serverless-http";
 import dotenv from "dotenv";
 
-dotenv.config(); // Cargar las variables de entorno
+dotenv.config(); // Cargar variables de entorno
 
 const app = express();
 
-// Configuración de CORS
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173", // URL de desarrollo local
-      "https://tudominio.netlify.app", // URL del frontend en producción
-    ],
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-  })
-);
+// Middleware de CORS
+app.use((req, res, next) => {
+  const allowedOrigins = [
+    "http://localhost:5173", // Localhost
+    "https://tudominio.netlify.app", // Frontend en producción
+  ];
+  const origin = req.headers.origin;
 
-// Middleware para solicitudes preflight
-app.options("*", (req, res) => {
-  res.set({
-    "Access-Control-Allow-Origin": req.headers.origin || "*",
-    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
-    "Access-Control-Allow-Credentials": "true",
-  });
-  res.status(204).end();
+  if (allowedOrigins.includes(origin || "")) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, DELETE"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+
+  // Si es una solicitud preflight, responde inmediatamente
+  if (req.method === "OPTIONS") {
+    return res.status(204).end();
+  }
+
+  next();
 });
 
 // Middleware para manejar JSON
@@ -59,4 +63,4 @@ app.post("/api/tweets", async (req, res) => {
   }
 });
 
-export default serverless(app);
+export default app; // Exportar como aplicación de Express
