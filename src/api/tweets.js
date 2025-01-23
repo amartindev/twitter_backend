@@ -12,7 +12,7 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "http://localhost:5173", // URL local
+      // "http://localhost:5173",  URL local
       "https://tudominio.netlify.app" // URL desplegada en Netlify
     ],
     methods: ["GET", "POST", "OPTIONS"],
@@ -66,10 +66,10 @@ app.post("/api/tweets", async (req, res) => {
   }
 });
 // Configuración para entorno live (comenta esta sección si usas serverless)
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+// const PORT = process.env.PORT || 5000;
+// app.listen(PORT, () => {
+//   console.log(`Servidor corriendo en http://localhost:${PORT}`);
+// });
 
 // Exportación para serverless (descomenta esta línea para usar con serverless)
-// export default serverless(app);
+export default serverless(app);
