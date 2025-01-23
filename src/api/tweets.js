@@ -35,6 +35,7 @@ app.options("*", (req, res) => {
 // Middleware para parsear JSON
 app.use(express.json());
 
+// Endpoint para obtener tweets
 app.post("/api/tweets", async (req, res) => {
   const { username } = req.body;
   const accessToken = process.env.TWITTER_ACCESS_TOKEN;
@@ -53,9 +54,22 @@ app.post("/api/tweets", async (req, res) => {
     );
     res.json(response.data);
   } catch (error) {
+    // Manejar específicamente el error 429
+    if (error.response && error.response.status === 429) {
+      // Si el error es 429, puedes devolver un mensaje más adecuado
+      return res.status(429).json({ error: "Too many requests. Please try again later." });
+    }
+
+    // En caso de otros errores, se maneja normalmente con el código 500
     console.error(error);
     res.status(500).json({ error: error.message });
   }
 });
+// Configuración para entorno live (comenta esta sección si usas serverless)
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+});
 
-export default serverless(app);
+// Exportación para serverless (descomenta esta línea para usar con serverless)
+// export default serverless(app);
